@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クリーニングの受付</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- xxxx年xx月を表示 -->
+    <h1 id="header"></h1>
+
+    <!-- ボタンクリックで月移動 -->
+    <div id="next-prev-button">
+        <button id="prev" onclick="prev()">‹</button>
+        <button id="next" onclick="next()">›</button>
+    </div>
+
+    <!-- カレンダー -->
+    <div id="calendar"></div>
+  </div>
+  <script src="holidays.js"></script>
+  <script src="calendar.js"></script>
+  <script src="main.js"></script>
+  <script src="dateFormatHandler.js"></script>
+</body>
+</html>
