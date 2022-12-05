@@ -3,7 +3,12 @@
 let notDisplayAcceptDays; // カレンダーに色付けされていない受取可能日の数
 
 function clickDay(clickDayDOM) {
+  const preRequestDay = document.getElementsByClassName('requestDay');
+  // preRequestDay.classList.remove('requestDay');
+  console.log(preRequestDay);
+
   let clickDay = getCalenderDate(clickDayDOM);
+  clickDayDOM.classList.add('requestDay');
   console.log(`クリックした日：${clickDay}`);
 
   // PHPに送るデータ
