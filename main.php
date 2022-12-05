@@ -1,17 +1,16 @@
 <?php
 // ヘッダ（データ形式、文字コードなど指定）
 header('Content-type: application/json; charset=utf-8');
-// 送ったデータの受け取り（GETで送った場合はINPUT_GET）
-// 配列を受け取る場合は第3, 4引数の指定が必要
+// 送ったデータの受け取り（配列を受け取る場合は第3, 4引数の指定が必要）
 $jsonData = filter_input(INPUT_POST, 'クリックした日付', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-$clickDay        = $jsonData['clickDay'];
+$clickDay        = $jsonData['clickDayStr'];
 $holidayAry      = $jsonData['holidayAry'];
 $sunday          = 0;
 $saturday        = 6;
-$acceptablePriod = 5; // 受取可能期間 (5日)
+$accepPriod      = 5; // 受取可能期間 (5日)
 $endDate         = date('Y/n/t', strtotime($clickDay)); // 月の最終日
-$acceptDateAry   = []; // 受取可能な日 (5日) を格納する配列
+$acceptDateAry   = []; // 受取可能日を格納する配列
 
 // ➀の完了日
 $toPlant = addDate($clickDay, 2);
@@ -47,7 +46,7 @@ $toshop = addDate($cheking, 2);
 $strageStart = addDate($toshop, 1);
 
 $count = 0;
-while($count < $acceptablePriod) {
+while($count < $accepPriod) {
   array_push($acceptDateAry, $strageStart);
   $strageStart = addDate($strageStart, 1);
   $count++;
@@ -68,6 +67,11 @@ function isHoliday($dateList, $checkDate) {
   return false;
 }
 
+/**
+ * 日付を指定日数分加算するメソッド
+ *
+ * @return string
+*/
 function addDate($date, $addDayNum) {
   return date("Y/n/j", strtotime("{$date} ".$addDayNum." day"));
 }

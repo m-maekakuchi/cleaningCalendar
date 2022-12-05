@@ -18,15 +18,15 @@ function prev(){
 function next(){
   showDate.setMonth(showDate.getMonth() + 1);
   showProcess(showDate);
-  console.log(notDisplayAcceptDays);
-  if (notDisplayAcceptDays && notDisplayAcceptDays !== 5) {
+  
+  if (notShowAcceptDaysNum && notShowAcceptDaysNum !== 5) {
     const tdDOMs = document.getElementsByTagName('td');
     for (let tdDOM of tdDOMs) {
       if (!tdDOM.classList.contains('disabled')) {
-        tdDOM.classList.add('acceptable');
-        notDisplayAcceptDays--;
+        tdDOM.classList.add('accept');
+        notShowAcceptDaysNum--;
       }
-      if(notDisplayAcceptDays === 0) {
+      if(notShowAcceptDaysNum === 0) {
         break;
       }
     }

@@ -78,9 +78,9 @@ td:first-child,
 td.holiday{
   color: red;
 }
-.requestDay {
+.request {
   background: yellowgreen;
 }
-.acceptable {
+.accept {
   background: #3cb3729d;
 }
