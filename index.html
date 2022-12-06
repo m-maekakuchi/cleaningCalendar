@@ -9,9 +9,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+
   <div class="wrapper">
+    <div class="header">
+      お預け日をお選びください。<br>
+      お受け取り可能期間が表示されます。
+    </div>
     <!-- xxxx年xx月を表示 -->
-    <h1 id="header"></h1>
+    <h1 id="tableheader"></h1>
 
     <!-- ボタンクリックで月移動 -->
     <div id="next-prev-button">
@@ -21,10 +26,16 @@
 
     <!-- カレンダー -->
     <div id="calendar"></div>
+    
+    <div class="color">
+      <span class="today">&emsp;&emsp;</span>&nbsp;本日<br>
+      <span class="request">&emsp;&emsp;</span>&nbsp;お預け日<br>
+      <span class="accept">&emsp;&emsp;</span>&nbsp;お受け取り可能期間
+    </div>
   </div>
-  <script src="holidays.js"></script>
+  <script src="utilities/holidays.js"></script>
   <script src="calendar.js"></script>
   <script src="main.js"></script>
-  <script src="dateFormatHandler.js"></script>
+  <script src="utilities/dateFormatHandler.js"></script>
 </body>
 </html>

@@ -2,57 +2,64 @@
 // ヘッダ（データ形式、文字コードなど指定）
 header('Content-type: application/json; charset=utf-8');
 // 送ったデータの受け取り（配列を受け取る場合は第3, 4引数の指定が必要）
-$jsonData = filter_input(INPUT_POST, 'クリックした日付', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$jsonData = filter_input(INPUT_POST, 'クリック日と祝日', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-$clickDay        = $jsonData['clickDayStr'];
-$holidayAry      = $jsonData['holidayAry'];
-$sunday          = 0;
-$saturday        = 6;
-$accepPriod      = 5; // 受取可能期間 (5日)
-$endDate         = date('Y/n/t', strtotime($clickDay)); // 月の最終日
-$acceptDateAry   = []; // 受取可能日を格納する配列
+$clickDate     = $jsonData['clickDayStr']; //クリックした日付
+$holidayAry    = $jsonData['holidayAry'];  //祝日
+$sunday        = 0;
+$saturday      = 6;
+$accepPriod    = 5;  // 受取可能期間 (5日)
+$acceptDateAry = []; // 受取可能日を格納する配列
+$endDate       = date('Y/n/t', strtotime($clickDate)); // 月の最終日
+$toPlantDays   = 2;  // ➀店舗から工場への移送にかかる日数
+$cleaningDays  = 5;  // ➁工場でのクリーニングにかかる日数
+$toCheckDays   = 1;  // ➂工場から検品場所への移送にかかる日数
+$chekingDays   = 1;  // ➃検品にかかる日数
+$toshopDays    = 2;  // ➄検品場所から店舗への移送にかかる日数
 
 // ➀の完了日
-$toPlant = addDate($clickDay, 2);
+$toPlantEndDate = addDate($clickDate, $toPlantDays);
 
 // ➁の完了日
-$clening = $toPlant;
+$cleningEndDate = $toPlantEndDate;
 $cleaningCount = 0;
 do {
-    $clening = addDate($clening, 1);
-    $datetime = new DateTime($clening);
+    $cleningEndDate = addDate($cleningEndDate, 1);
+    $datetime = new DateTime($cleningEndDate);
     $week = $datetime->format('w');
-    if ($week != $sunday && $week != $saturday && !isHoliday($holidayAry, $clening)) $cleaningCount++;
-} while ($cleaningCount < 5);
+    if ($week != $sunday && $week != $saturday && !isHoliday($holidayAry, $cleningEndDate)) $cleaningCount++;
+} while ($cleaningCount < $cleaningDays);
 
 
 // ➂の完了日
-$toCheck = addDate($clening, 1);
+$toCheckEndDate = addDate($cleningEndDate, $toCheckDays);
 
 
 // ➃の完了日
-$cheking =  $toCheck;
+$chekingEndDate =  $toCheckEndDate;
 do {
-    $cheking = addDate($cheking, 1);
-    $datetime = new DateTime($cheking);
+    $chekingEndDate = addDate($chekingEndDate, $chekingDays);
+    $datetime = new DateTime($chekingEndDate);
     $week = $datetime->format('w');
-} while ($week == $sunday || $week == $saturday || isHoliday($holidayAry, $cheking));
+} while ($week == $sunday || $week == $saturday || isHoliday($holidayAry, $chekingEndDate));
 
 
 // ➄の完了日
-$toshop = addDate($cheking, 2);
+$toshopEndDate = addDate($chekingEndDate, $toshopDays);
 
 // ➅の開始日 
-$strageStart = addDate($toshop, 1);
+$strageStartDate = addDate($toshopEndDate, 1);
 
+//受取可能日を配列に格納
 $count = 0;
 while($count < $accepPriod) {
-  array_push($acceptDateAry, $strageStart);
-  $strageStart = addDate($strageStart, 1);
+  array_push($acceptDateAry, $strageStartDate);
+  $strageStartDate = addDate($strageStartDate, 1);
   $count++;
 }
 
-echo json_encode($acceptDateAry); //　echoするとデータを返せる（JSON形式に変換して返す）
+// echoするとデータを返せる（JSON形式に変換して返す）
+echo json_encode($acceptDateAry);
 
 
 /**

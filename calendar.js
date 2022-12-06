@@ -1,7 +1,7 @@
 const week = ["日", "月", "火", "水", "木", "金", "土"];
 const today = new Date();
 // 月末だとずれる可能性があるため、1日固定で取得
-var showDate = new Date(today.getFullYear(), today.getMonth(), 1);
+let showDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
 // 祝日取得
 window.onload = function () {
@@ -12,6 +12,18 @@ window.onload = function () {
 function prev(){
   showDate.setMonth(showDate.getMonth() - 1);
   showProcess(showDate);
+
+  const tdDOMs = document.getElementsByTagName('td');
+  //受付日と受取可能期間が月を跨いでいて、かつ「<」ボタンが押された場合
+  if (clickDayStr !== undefined) {
+    for (let tdDOM of tdDOMs) {
+      let tdDate = getCalenderDateStr(tdDOM);
+      if (tdDate === clickDayStr && !tdDOM.classList.contains('disabled')) {
+        tdDOM.classList.add('request');
+      }
+    }
+  }
+
 }
 
 // 次の月表示
@@ -19,13 +31,16 @@ function next(){
   showDate.setMonth(showDate.getMonth() + 1);
   showProcess(showDate);
   
-  if (notShowAcceptDaysNum && notShowAcceptDaysNum !== 5) {
+  //受取可能日すべてが翌月で「>」ボタンを押した場合
+  if (notShowAcceptDaysNum !== undefined && 0 < notShowAcceptDaysNum && notShowAcceptDaysNum < 5) {
     const tdDOMs = document.getElementsByTagName('td');
     for (let tdDOM of tdDOMs) {
+      //先月の日付は省いて、受取可能期間を色付けする
       if (!tdDOM.classList.contains('disabled')) {
         tdDOM.classList.add('accept');
         notShowAcceptDaysNum--;
       }
+      //5日間すべて色付けしたら終了
       if(notShowAcceptDaysNum === 0) {
         break;
       }
@@ -37,7 +52,7 @@ function next(){
 function showProcess(date) {
   var year = date.getFullYear();
   var month = date.getMonth(); // 0始まり
-  document.querySelector('#header').innerHTML = year + "年 " + (month + 1) + "月";
+  document.querySelector('#tableheader').innerHTML = year + "年 " + (month + 1) + "月";
 
   var calendar = createProcess(year, month);
   document.querySelector('#calendar').innerHTML = calendar;
@@ -69,7 +84,7 @@ function createProcess(year, month) {
       } else if (count >= endDate) {
         // 最終行で最終日以降、翌月の日付を設定
         count++;
-        calendar += "<td class='disabled' onclick='clickDay(this)' >" + (count - endDate) + "</td>";
+        calendar += "<td class='disabled'>" + (count - endDate) + "</td>";
       } else {
         // 当月の日付を曜日に照らし合わせて設定
         count++;
