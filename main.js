@@ -8,7 +8,6 @@ let clickDayStr;          // クリックした日付
 function clickDay(clickDayDOM) {
   //日付をクリックしたのが2回目以降のとき、前のクリック日の背景色を削除
   if (preRequestDateDOM !== undefined) {
-    console.log(preRequestDateDOM);
     preRequestDateDOM.classList.remove('request');
   }
   preRequestDateDOM = clickDayDOM;
@@ -17,6 +16,8 @@ function clickDay(clickDayDOM) {
   clickDayDOM.classList.add('request');
   clickDayStr = getCalenderDateStr(clickDayDOM);
   console.log(`クリックした日：${clickDayStr}`);
+  let dateList = request.responseText.split('\n');
+  console.log(dateList);
 
   // PHPに送るデータ
   const jsonData = {
