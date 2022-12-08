@@ -57,6 +57,10 @@ td:first-child {
   color: red;
 }
 
+td.holiday{
+  color: red;
+}
+
 td:last-child {
   color: blue;
 }
@@ -96,11 +100,6 @@ td.disabled {
 
 #next {
   float: right;
-}
-
-td:first-child,
-td.holiday{
-  color: red;
 }
 
 .color {
