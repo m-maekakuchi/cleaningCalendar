@@ -16,8 +16,6 @@ function clickDay(clickDayDOM) {
   clickDayDOM.classList.add('request');
   clickDayStr = getCalenderDateStr(clickDayDOM);
   console.log(`クリックした日：${clickDayStr}`);
-  let dateList = request.responseText.split('\n');
-  console.log(dateList);
 
   // PHPに送るデータ
   const jsonData = {

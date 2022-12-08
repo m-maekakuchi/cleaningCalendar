@@ -1,18 +1,24 @@
-const week = ["日", "月", "火", "水", "木", "金", "土"];
-const today = new Date();
+const week     = ["日", "月", "火", "水", "木", "金", "土"];
+const today    = new Date();
+let holidayAry = [];
+let request;
 // 月末だとずれる可能性があるため、1日固定で取得
 let showDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
-// 祝日取得
-let request;
 window.onload = function () {
   request = new XMLHttpRequest();
-    request.open('get', 'syukujitsu.csv', true);
-    request.send(null);
-    request.onload = function () {
-      // 初期表示
-      showProcess(today, calendar);
-    };
+  request.open('get', 'utilities/holidays.csv', true);
+  request.send(null);
+  
+  request.onload = function () {
+    // 祝日取得
+    let dateList = request.responseText.split(/\n|\r\n|\r/);
+    for (date of dateList) {
+      holidayAry.push(date.split(',')[0]);
+    }
+    // 初期表示
+    showProcess(today, calendar); 
+  };
 };
 
 // 前の月表示
@@ -139,7 +145,7 @@ function isToday(year, month, day) {
 // 祝日かどうか
 function isHoliday(year, month, day) {
   let checkDate = year + '/' + (month + 1) + '/' + day;
-  let dateList = request.responseText.split('/\r\n|\n/');
+  let dateList = request.responseText.split(/\n|\r\n|\r/);
   for (let i = 0; i < dateList.length; i++) {
     if (dateList[i].split(',')[0] == checkDate) {
       return [true, dateList[i].split(',')[1]];

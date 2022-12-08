@@ -69,7 +69,7 @@ echo json_encode($acceptDateAry);
 */
 function isHoliday($dateList, $checkDate) {
   forEach ($dateList as $date) {
-    if ($date[0] == $checkDate) return true;
+    if ($date == $checkDate) return true;
   }
   return false;
 }
